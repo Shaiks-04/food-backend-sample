@@ -1,16 +1,30 @@
-const axios = require('axios');
-
-const apiKey = 'zRR9hynVIzfP9pR7j/u7ow==a4xV7oWtyd7Wdz3B';
-const query = 'pizza Dough';
-
-axios.get(`https://api.api-ninjas.com/v1/recipe?query=${encodeURIComponent(query)}`, {
-  headers: {
-    'X-Api-Key': apiKey,
-  },
-})
-  .then((response) => {
-    console.log(response.data[0].instructions);
-  })
-  .catch((error) => {
-    console.error('Request failed:', error);
+  const express = require("express");
+  const cors=require("cors");
+  const app = express();
+  
+  app.use(cors())
+  app.use(express.json())
+  
+  const mongoose = require("mongoose");
+  mongoose.set("strictQuery", true);
+  const url = "mongodb+srv://shaikrahaman04:shaik123@cluster0.fqimvvo.mongodb.net/?retryWrites=true&w=majority";
+  const connection=require("./config/mongoose")
+  
+  const user=require("./route/userroute")
+  const recipe=require("./route/recipeRoutes")
+  app.use('/api',recipe)
+  app.use('/api',user)
+  
+  app.get("/", (req, res) => {
+      res.send({ msg: "this is a testing phase" });
   });
+  
+  app.listen(3002, async () => {
+      try {
+          await connection(url);
+          console.log("server running on port 3002");
+      } catch (err) {
+          console.log(err, "error occurred in running");
+      }
+  });
+  
