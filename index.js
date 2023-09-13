@@ -12,8 +12,10 @@
   
   const user=require("./route/userroute")
   const recipe=require("./route/recipeRoutes")
+  const save=require("./route/saveroute")
   app.use('/api',recipe)
   app.use('/api',user)
+  app.use('/api',save)
   
   app.get("/", (req, res) => {
       res.send({ msg: "this is a testing phase" });
